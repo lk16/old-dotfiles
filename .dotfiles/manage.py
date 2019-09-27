@@ -13,7 +13,7 @@ def cli():
 @cli.command()
 def weather():
     r = requests.get(
-        "https://api.openweathermap.org/data/2.5/weather?q=London,uk&APPID=d9a557c2687e36ed1ea2f2d1cac38cb7&units=metric"
+        "https://api.openweathermap.org/data/2.5/weather?q=Copenhagen,dk&APPID=d9a557c2687e36ed1ea2f2d1cac38cb7&units=metric"
     )
     data = json.loads(r.text)
 
