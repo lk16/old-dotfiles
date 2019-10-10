@@ -9,8 +9,12 @@ jsonschema validator
 title/snake/... case converter
 confirm for dangerous commands
 
-bluetooth headphones battery
-
+updates from:
+- slack
+- gmail
+- jira
+- bitbucket
+- calendar (next meeting / available meetingrooms)
 
 tmux:
 https://peterforgacs.github.io/2017/04/25/Tmux/ 
