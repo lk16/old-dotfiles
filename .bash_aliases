@@ -59,3 +59,5 @@ function bright() {
         xrandr --output "$output" --brightness $1 2>/dev/null
     done
 }
+
+
