@@ -60,4 +60,6 @@ function bright() {
     done
 }
 
-
+function confirm() {
+    $HOME/.dotfiles/manage.py confirm -- $@
+}
