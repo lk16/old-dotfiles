@@ -128,7 +128,7 @@ fi
 
 # Add git branch if its present to PS1
 parse_git_branch() {
-    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1) /'
+    echo $(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1) /' | cut -d'-' -f 1-3)') '
 }
 
 PS1="\\[${USER_PROMPT_COLOR}\\]\u \W \\[${COLOR_LIGHT_GREEN}\\]\$(parse_git_branch)\\[${USER_PROMPT_COLOR}\\]\$ \\[${USER_COMMAND_COLOR}\\]"
@@ -152,3 +152,5 @@ export GOBIN=$HOME/projects/golang/bin
 # modify PATH such that repeated entries are removed
 PATH=$(python3 -c 'import os; from collections import OrderedDict; \
     l=os.environ["PATH"].split(":"); print(":".join(OrderedDict.fromkeys(l)))' )
+
+
