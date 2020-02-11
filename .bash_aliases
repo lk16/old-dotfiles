@@ -35,6 +35,7 @@ alias ggr="git rebase"
 alias ggrc="git rebase --continue"
 alias gitroot='git rev-parse --show-toplevel 2>/dev/null'
 alias gv="git rev-parse HEAD | cut -c -8"
+alias ggpf="git push --force-with-lease"
 
 alias edit="code"
 alias json="python3 -m json.tool"
