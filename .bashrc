@@ -128,10 +128,10 @@ fi
 
 # Add git branch if its present to PS1
 parse_git_branch() {
-    git rev-parse --git-dir >/dev/null 2>&1 && git rev-parse --abbrev-ref HEAD | cut -d '-' -f -3
+    git rev-parse --git-dir >/dev/null 2>&1 && echo -n '(' && git rev-parse --abbrev-ref HEAD | cut -d '-' -f -3 | tr -d '\n' && echo -n ') '
 }
 
-PS1="\\[${USER_PROMPT_COLOR}\\]\u \W \\[${COLOR_LIGHT_GREEN}\\](\$(parse_git_branch)) \\[${USER_PROMPT_COLOR}\\]\$ \\[${USER_COMMAND_COLOR}\\]"
+PS1="\\[${USER_PROMPT_COLOR}\\]\u \W \\[${COLOR_LIGHT_GREEN}\\]\$(parse_git_branch)\\[${USER_PROMPT_COLOR}\\]\$ \\[${USER_COMMAND_COLOR}\\]"
 trap '[[ -t 1 ]] && tput sgr0' DEBUG
 
 # setup server aliases if the file exists
