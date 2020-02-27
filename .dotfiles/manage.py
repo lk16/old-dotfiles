@@ -25,7 +25,7 @@ def weather():
     location = conf["location"]
     api_key = conf["api_key"]
 
-    url = f"https://api.openweathermap.org/data/2.5/weather?q={location}&APPID={api_key}&units=metric"
+    url = "https://api.openweathermap.org/data/2.5/weather?q={}&APPID={}&units=metric".format(location, api_key)
 
     r = requests.get(url)
     data = json.loads(r.text)
@@ -39,9 +39,9 @@ def weather():
 @cli.command()
 @click.argument("cmd", nargs=-1)
 def confirm(cmd):
-    print(f'You are about to run this command: {" ".join(cmd)}')
+    print('You are about to run this command: {}'.format(" ".join(cmd)))
     number = random.randint(100, 1000)
-    print(f"To confirm type this number: {number}")
+    print("To confirm type this number: {}".format(number))
     if input("> ") == str(number):
         subprocess.call(cmd)
 
