@@ -40,11 +40,6 @@ alias ggpf="git push --force-with-lease"
 alias edit="code"
 alias json="python3 -m json.tool"
 
-function battery() {
-    output=$(acpitool -B | grep 'Remaining capacity' | cut -d ' ' -f 10 | cut -d '.' -f 1)
-    echo $output'%'
-}
-
 function goo() {
     brave-browser --new-tab "https://google.com/search?q=$*" 2>&1 >/dev/null
 }

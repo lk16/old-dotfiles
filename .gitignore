@@ -1,2 +1,3 @@
 conf.json
 *.code-workspace
+.vscode/
