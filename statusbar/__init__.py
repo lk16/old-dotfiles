@@ -1,3 +1,4 @@
+import sys
 import click
 import requests
 import os
@@ -7,13 +8,33 @@ import json
 import re
 import random
 import subprocess
+import traceback
+
+class SkipItemException(Exception):
+    pass
 
 def load_config(section):
     config_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "conf.json")
     return json.load(open(config_file, "r"))[section]
 
 def get_battery():
-    return 'TODO'
+    command = ['acpitool', '-B']
+
+    try:
+        process = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    except FileNotFoundError as e:
+        raise SkipItemException("acpitool is not installed") from e
+
+    output = process.stdout.decode('utf-8')
+
+    marker = 'Remaining capacity'
+
+    for line in output:
+        if marker in line:
+            percentage = round(float(line.split(' ')[-1][:-1]))
+            return f'{percentage}%'
+
+    raise ValueError(f'Marker "{marker}" not found')
 
 def get_date():
     return datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
@@ -29,23 +50,32 @@ def get_weather():
     data = json.loads(r.text)
 
     temp = int(data["main"]["temp"])
-    weather_group = list([item["main"] for item in data["weather"]])[0]
+    weather = list([item["main"] for item in data["weather"]])[0]
 
-    weather_chars = {
-        "Thunderstorm": "🌩 ",
-        "Drizzle": "🌧 ",
-        "Rain": "🌧 🌧 ",
-        "Snow": "🌨 ",
-        "Clear": "☼ ",
-        "Clouds": "🌥️ "
-    }
+    return f'{temp}°C {weather}'
 
-    try:
-        weather = weather_chars[weather_group]
-    except KeyError:
-        weather = weather_group
+def get_spotify_song():
 
-    return str(temp) + "°C " + weather
+    command = [
+        'dbus-send',
+        '--print-reply',
+        '--dest=org.mpris.MediaPlayer2.spotify',
+        '/org/mpris/MediaPlayer2',
+        'org.freedesktop.DBus.Properties.Get',
+        'string:org.mpris.MediaPlayer2.Player',
+        'string:Metadata'
+    ]
+    process = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+    if process.returncode != 0:
+        raise SkipItemException
+
+    output = process.stdout.decode('utf-8').replace('\n', '')
+
+    artist = re.search('string "xesam:artist".*?string "(.*?)"', output).group(1)
+    title = re.search('string "xesam:title".*?string "(.*?)"', output).group(1)
+
+    return "{} / {}".format(artist, title)
 
 def get_statusbar():
 
@@ -61,26 +91,21 @@ def get_statusbar():
         '#[bg=colour233]#[fg=colour11]'
     ]
 
-    statusbar = ""
+    statusbar = []
     for i, item in enumerate(items):
-        statusbar += color_headers[i%len(color_headers)] + ' ' + item() + ' '
+        header = color_headers[len(statusbar)%len(color_headers)]
 
-    print(statusbar, end='')
+        try:
+            item_text = item()
+        except SkipItemException as e:
+            print(str(e), file=sys.stderr)
+            continue
+        except Exception:
+            traceback.print_exc()
+            continue
+
+        statusbar.append(f'{header} {item_text} ')
+
+    print(''.join(statusbar), end='')
 
 
-def get_spotify_song():
-    command = ['dbus-send', '--print-reply', '--dest=org.mpris.MediaPlayer2.spotify',  '/org/mpris/MediaPlayer2',
-        'org.freedesktop.DBus.Properties.Get', 'string:org.mpris.MediaPlayer2.Player', 'string:Metadata']
-    process = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-    output = process.stdout.decode('utf-8')
-    output = output.replace('\n', '')
-
-    try:
-        artist = re.search('string "xesam:artist".*?string "(.*?)"', output).group(1)
-        title = re.search('string "xesam:title".*?string "(.*?)"', output).group(1)
-    except Exception:
-        artist = ""
-        title = ""
-
-    return "{} / {}".format(artist, title)
