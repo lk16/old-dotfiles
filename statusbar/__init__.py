@@ -12,7 +12,6 @@ def load_config(section):
     config_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "conf.json")
     return json.load(open(config_file, "r"))[section]
 
-
 def get_battery():
     return 'TODO'
 
@@ -67,7 +66,6 @@ def get_statusbar():
         statusbar += color_headers[i%len(color_headers)] + ' ' + item() + ' '
 
     print(statusbar, end='')
-
 
 
 def get_spotify_song():

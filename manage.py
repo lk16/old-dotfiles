@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 import click
 import requests
@@ -59,8 +59,6 @@ def highlight(**kwargs):
 @cli.command()
 def get_statusbar():
     return statusbar.get_statusbar()
-
-
 
 if __name__ == "__main__":
     cli()

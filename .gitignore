@@ -1,4 +1,6 @@
+venv/
 conf.json
 *.code-workspace
 .vscode/
 __pycache__
+.python-version
