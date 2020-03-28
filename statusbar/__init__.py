@@ -81,9 +81,24 @@ def get_spotify_song():
 
 def get_reddit():
     conf = load_config("reddit")
-    reddit = praw.Reddit(client_id=conf['client_id'], client_secret=conf['client_secret'], user_agent='linux:dotfiles:v0.0.0')
-    me = reddit.redditor(conf['nick'])
-    return str(me.link_karma + me.comment_karma)
+
+    reddit = praw.Reddit(
+        client_id=conf['client_id'],
+        client_secret=conf['client_secret'],
+        refresh_token=conf['refresh_token'],
+        user_agent='testscript by /u/fakebot3')
+
+
+    me = reddit.user.me()
+    karma = me.link_karma + me.comment_karma
+    unread = len(list(reddit.inbox.unread(limit=None)))
+
+    text = str(karma)
+
+    if unread > 0:
+        text += f' ({unread})'
+
+    return text
 
 def get_statusbar():
 

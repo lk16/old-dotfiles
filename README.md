@@ -17,9 +17,9 @@ These are my dotfiles. Feel free to use them on your machine!
         - [ ] show symbol if charching
     - [x] current date and time
     - [ ] updates
-        - [ ] reddit
+        - [x] reddit
             - [x] karma
-            - [ ] unread replies
+            - [x] unread replies
         - [ ] slack
             - [ ] unread mentions
             - [ ] allow blacklisting channels
