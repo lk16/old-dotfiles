@@ -80,13 +80,17 @@ def get_spotify_song():
     return "{} / {}".format(artist, title)
 
 def get_reddit():
+
+    # See https://praw.readthedocs.io/en/latest/getting_started/authentication.html#obtain-the-authorization-url
+    # and check "using a saved refresh token" to get below credentials
+
     conf = load_config("reddit")
 
     reddit = praw.Reddit(
         client_id=conf['client_id'],
         client_secret=conf['client_secret'],
         refresh_token=conf['refresh_token'],
-        user_agent='testscript by /u/fakebot3')
+        user_agent='linux:dotfiles:v0.0.0')
 
 
     me = reddit.user.me()
