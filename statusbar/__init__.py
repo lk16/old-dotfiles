@@ -107,8 +107,8 @@ def get_reddit():
 def get_statusbar():
 
     items = [
-        get_reddit,
         get_spotify_song,
+        get_reddit,
         get_weather,
         get_battery,
         get_date,

@@ -7,10 +7,16 @@ These are my dotfiles. Feel free to use them on your machine!
 - [ ] general
     - [ ] create install script and test
     - [x] use virtualenv to not depend on click being globally installed
-    - [ ] use black
+    - [ ] lint code
+    - [ ] use type annotations
+    - [ ] test everything
+
 
 - [ ] tmux statusbar
-    - [ ] customize update interval per statusbar item
+    - [ ] customize statusbar items
+        - [ ] allow customizing order in config file
+        - [ ] update interval
+        - [ ] colours
     - [ ] warnings
         - [ ] full disk
         - [ ] high cpu usage
