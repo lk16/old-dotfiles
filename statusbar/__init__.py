@@ -104,15 +104,19 @@ def get_reddit():
 
     return text
 
+statusbar_item_funcs = {
+    "battery": get_battery,
+    "date": get_date,
+    "reddit": get_reddit,
+    "spotify": get_spotify_song,
+    "weather": get_weather,
+}
+
 def get_statusbar():
 
-    items = [
-        get_spotify_song,
-        get_reddit,
-        get_weather,
-        get_battery,
-        get_date,
-    ]
+    conf = load_config('statusbar')
+
+    items = conf["items"]
 
     color_headers = [
         '#[bg=colour238]#[fg=colour11]',
@@ -124,9 +128,15 @@ def get_statusbar():
         header = color_headers[len(statusbar)%len(color_headers)]
 
         try:
-            item_text = item()
+            statusbar_item_func = statusbar_item_funcs[item]
+        except KeyError as e:
+            print(repr(e), file=sys.stderr)
+            continue
+
+        try:
+            item_text = statusbar_item_func()
         except SkipItemException as e:
-            print(str(e), file=sys.stderr)
+            print(repr(e), file=sys.stderr)
             continue
         except Exception:
             traceback.print_exc(file=sys.stderr)

@@ -14,7 +14,7 @@ These are my dotfiles. Feel free to use them on your machine!
 
 - [ ] tmux statusbar
     - [ ] customize statusbar items
-        - [ ] allow customizing order in config file
+        - [x] allow customizing order in config file
         - [ ] update interval
         - [ ] colours
     - [ ] warnings
