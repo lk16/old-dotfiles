@@ -18,7 +18,7 @@ These are my dotfiles. Feel free to use them on your machine!
     - [x] current date and time
     - [ ] updates
         - [ ] reddit
-            - [ ] karma
+            - [x] karma
             - [ ] unread replies
         - [ ] slack
             - [ ] unread mentions

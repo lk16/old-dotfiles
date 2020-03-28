@@ -9,6 +9,7 @@ import re
 import random
 import subprocess
 import traceback
+import praw
 
 class SkipItemException(Exception):
     pass
@@ -78,9 +79,16 @@ def get_spotify_song():
 
     return "{} / {}".format(artist, title)
 
+def get_reddit():
+    conf = load_config("reddit")
+    reddit = praw.Reddit(client_id=conf['client_id'], client_secret=conf['client_secret'], user_agent='linux:dotfiles:v0.0.0')
+    me = reddit.redditor(conf['nick'])
+    return str(me.link_karma + me.comment_karma)
+
 def get_statusbar():
 
     items = [
+        get_reddit,
         get_spotify_song,
         get_weather,
         get_battery,

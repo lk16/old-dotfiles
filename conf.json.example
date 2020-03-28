@@ -2,5 +2,10 @@
     "weather": {
         "api_key": "your openweathermap key",
         "location": "Copenhagen,dk"
+    },
+    "reddit": {
+        "client_id": "",
+        "client_secret": "",
+        "nick": ""
     }
 }
