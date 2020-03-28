@@ -44,9 +44,10 @@ def get_weather():
     location = conf["location"]
     api_key = conf["api_key"]
 
-    url = "https://api.openweathermap.org/data/2.5/weather?q={}&APPID={}&units=metric".format(location, api_key)
+    r = requests.get(f"https://api.openweathermap.org/data/2.5/weather?q={location}&APPID={api_key}&units=metric")
 
-    r = requests.get(url)
+    r.raise_for_status()
+
     data = json.loads(r.text)
 
     temp = int(data["main"]["temp"])
@@ -101,7 +102,7 @@ def get_statusbar():
             print(str(e), file=sys.stderr)
             continue
         except Exception:
-            traceback.print_exc()
+            traceback.print_exc(file=sys.stderr)
             continue
 
         statusbar.append(f'{header} {item_text} ')
