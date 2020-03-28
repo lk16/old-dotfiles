@@ -10,6 +10,10 @@ These are my dotfiles. Feel free to use them on your machine!
     - [ ] use black
 
 - [ ] tmux statusbar
+    - [ ] customize update interval per statusbar item
+    - [ ] warnings
+        - [ ] full disk
+        - [ ] high cpu usage
     - [x] weather
     - [x] spotify
     - [ ] battery
