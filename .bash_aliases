@@ -27,7 +27,6 @@ alias l='ls -CF'
 alias gig='git'
 
 alias gg="git log --graph --oneline --decorate --all"
-alias ggs="git push"
 alias ggs="git status"
 alias ggsi="git status --ignored"
 alias ggc="git checkout"
