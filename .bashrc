@@ -116,7 +116,7 @@ export COLOR_GRAY='\e[0;30m'
 export COLOR_LIGHT_GRAY='\e[0;37m'
 
 
-# default prompt colors 
+# default prompt colors
 USER_PROMPT_COLOR=$COLOR_LIGHT_BLUE
 USER_COMMAND_COLOR=$COLOR_LIGHT_PURPLE
 
@@ -128,10 +128,13 @@ fi
 
 # Add git branch if its present to PS1
 parse_git_branch() {
-    git rev-parse --git-dir >/dev/null 2>&1 && git rev-parse --abbrev-ref HEAD | cut -d '-' -f -3
+    branch=$(git rev-parse --git-dir >/dev/null 2>&1 && git rev-parse --abbrev-ref HEAD 2>/dev/null | cut -d '-' -f -3| tr -d '\n')
+    if [ $? -eq 0 ]; then
+        echo -n "($branch) "
+    fi
 }
 
-PS1="\\[${USER_PROMPT_COLOR}\\]\u \W \\[${COLOR_LIGHT_GREEN}\\](\$(parse_git_branch)) \\[${USER_PROMPT_COLOR}\\]\$ \\[${USER_COMMAND_COLOR}\\]"
+PS1="\\[${USER_PROMPT_COLOR}\\]\u \W \\[${COLOR_LIGHT_GREEN}\\]\$(parse_git_branch)\\[${USER_PROMPT_COLOR}\\]\$ \\[${USER_COMMAND_COLOR}\\]"
 trap '[[ -t 1 ]] && tput sgr0' DEBUG
 
 # setup server aliases if the file exists
@@ -148,6 +151,15 @@ export PATH=$PATH:/usr/local/go/bin:$HOME/projects/golang/bin
 
 export GOPATH=$HOME/projects/golang
 export GOBIN=$HOME/projects/golang/bin
+
+# setup pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+fi
+
 
 # modify PATH such that repeated entries are removed
 PATH=$(python3 -c 'import os; from collections import OrderedDict; \
