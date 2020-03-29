@@ -13,7 +13,7 @@ ln -s $HOME/.dotfiles/.bashrc $HOME/.bashrc
 ln -s $HOME/.dotfiles/.bash_aliases $HOME/.bash_aliases
 ln -s $HOME/.dotfiles/.tmux.conf $HOME/.tmux.conf
 ```
-* Install [pyenv](https://github.com/pyenv/pyenv#installation)
+* Install [pyenv](https://github.com/pyenv/pyenv#installation). Note the pyenv `PATH` value is already in `$HOME/.bashrc`
 * Install python 3.7.6 and python dependencies:
 ```sh
 cd $HOME/.dotfiles
@@ -25,6 +25,8 @@ virtualenv -p `which python` venv
 pip install -r requirements.txt
 
 ```
+* Modify `$HOME/.dotfiles/conf.json` to your taste. You can use the sample file `conf.json.example`.
+
 
 
 
