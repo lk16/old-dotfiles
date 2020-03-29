@@ -25,6 +25,8 @@ virtualenv -p `which python` venv
 pip install -r requirements.txt
 
 ```
+* Modify `$HOME/.dotfiles/conf.json` to your taste. You can use the sample file `conf.json.example`.
+
 
 
 
