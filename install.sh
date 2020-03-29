@@ -13,8 +13,10 @@ cd $HOME/.dotfiles || {
 pyenv install --skip-existing 3.7.6
 pyenv local 3.7.6
 
-pip install --upgrade pip
-
 virtualenv -p `which python` venv
 . ./venv/bin/activate
 pip install -r requirements.txt
+
+ln -s $HOME/.dotfiles/.bashrc ~/.bashrc || echo "please backup your $HOME/.bashrc file, so we can simlink it from the repo"
+ln -s $HOME/.dotfiles/.bash_aliases ~/.bash_aliases || echo "please backup your $HOME/.bash_aliases file, so we can simlink it from the repo"
+ln -s $HOME/.dotfiles/.tmux.conf ~/.tmux.conf || echo "please backup your $HOME/.tmux file, so we can simlink it from the repo"
