@@ -26,7 +26,7 @@ def get_battery():
     except FileNotFoundError as e:
         raise SkipItemException("acpitool is not installed") from e
 
-    output = process.stdout.decode('utf-8')
+    output = process.stdout.decode('utf-8').split('\n')
 
     marker = 'Remaining capacity'
 
