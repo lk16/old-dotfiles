@@ -3,9 +3,35 @@
 
 These are my dotfiles. Feel free to use them on your machine!
 
+## Installing
+
+* Backup or remove any existing `$HOME/.bashrc`, `$HOME/.bash_aliases` and `$HOME/.tmux.conf`
+* Clone this repo into `HOME/.dotfiles`
+* Symlink all dotfiles to the files in the repo:
+```sh
+ln -s $HOME/.dotfiles/.bashrc $HOME/.bashrc
+ln -s $HOME/.dotfiles/.bash_aliases $HOME/.bash_aliases
+ln -s $HOME/.dotfiles/.tmux.conf $HOME/.tmux.conf
+```
+* Install [pyenv](https://github.com/pyenv/pyenv#installation)
+* Install python 3.7.6 and python dependencies:
+```sh
+cd $HOME/.dotfiles
+pyenv install --skip-existing 3.7.6
+pyenv local 3.7.6
+
+virtualenv -p `which python` venv
+. ./venv/bin/activate
+pip install -r requirements.txt
+
+```
+
+
+
+
 ## TODO
 - [ ] general
-    - [ ] create install script and test
+    - [ ] create install guide
     - [x] use virtualenv to not depend on click being globally installed
     - [ ] lint code
     - [ ] use type annotations
