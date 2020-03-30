@@ -4,3 +4,4 @@ conf.json
 .vscode/
 __pycache__
 .python-version
+statusbar/.cache.json

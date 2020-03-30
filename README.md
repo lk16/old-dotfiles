@@ -33,7 +33,7 @@ pip install -r requirements.txt
 
 ## TODO
 - [ ] general
-    - [ ] create install guide
+    - [x] create install guide
     - [x] use virtualenv to not depend on click being globally installed
     - [ ] lint code
     - [ ] use type annotations
@@ -43,7 +43,7 @@ pip install -r requirements.txt
 - [ ] tmux statusbar
     - [ ] customize statusbar items
         - [x] allow customizing order in config file
-        - [ ] update interval
+        - [x] update interval
         - [ ] colours
     - [ ] warnings
         - [ ] full disk
