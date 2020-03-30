@@ -237,12 +237,19 @@ statusbar_classes = {
     "slack": Slack,
 }
 
-def get_statusbar():
+def get_statusbar(run_item, enable_cache):
 
     conf = load_config('statusbar')
-    cache = load_cache()
 
-    items = conf["items"]
+    if enable_cache:
+        cache = load_cache()
+    else:
+        cache = {}
+
+    if run_item:
+        items = [run_item]
+    else:
+        items = conf["items"]
 
     color_headers = [
         '#[bg=colour238]#[fg=colour11]',
@@ -300,6 +307,6 @@ def get_statusbar():
                 }
 
     write_cache(cache)
-    print(''.join(statusbar), end='')
+    print(''.join(statusbar))
 
 

@@ -56,9 +56,11 @@ def highlight(**kwargs):
         print(line, end='')
 
 
+@click.option('-i', '--item', type=str)
+@click.option('--cache/--no-cache', default=True)
 @cli.command()
-def get_statusbar():
-    return statusbar.get_statusbar()
+def get_statusbar(item, cache):
+    return statusbar.get_statusbar(run_item=item, enable_cache=cache)
 
 if __name__ == "__main__":
     cli()
