@@ -16,5 +16,19 @@
             "battery",
             "date"
         ]
-    }
+    },
+    "slack": {
+        "token": "",
+        "channel_ratings": {
+            "good": [
+                ""
+            ],
+            "medium": [
+                ""
+            ],
+            "bad": [
+                ""
+            ]
+        }
+    },
 }

@@ -11,6 +11,7 @@ import random
 import subprocess
 import traceback
 import praw
+import slack
 
 class SkipItemException(Exception):
     pass
@@ -124,7 +125,6 @@ class Reddit(StatusBarItem):
             refresh_token=conf['refresh_token'],
             user_agent='linux:dotfiles:v0.0.0')
 
-
         me = reddit.user.me()
         karma = me.link_karma + me.comment_karma
         unread = len(list(reddit.inbox.unread(limit=None)))
@@ -136,12 +136,105 @@ class Reddit(StatusBarItem):
 
         return text
 
+class Slack(StatusBarItem):
+
+    def expiry(self):
+        return 60
+
+    def get_text(self):
+        conf = load_config("slack")
+
+        rtm_client = slack.RTMClient(
+        token=conf['token'],
+        connect_method='rtm.start'
+        )
+
+        @rtm_client.run_on(event="open")
+        def on_open(**payload):
+            rtm_client.slack_state = payload['data']
+            payload['rtm_client'].stop()
+
+        rtm_client.start()
+
+        slack_state = rtm_client.slack_state
+
+        muted_channel_ids = set(slack_state['self']['prefs']['muted_channels'].split(','))
+
+        id_to_username = {}
+        for user in slack_state["users"]:
+            id_to_username[user["id"]] = user.get("real_name") or user.get("name") or "???"
+
+        output = []
+
+        def get_rating(channel, conf, muted_channel_ids):
+
+            if channel['id'] in muted_channel_ids:
+                return 'muted'
+
+            if channel['is_im'] or channel['is_mpim']:
+                return 'direct'
+
+            for rating, channels in conf['channel_ratings'].items():
+                if rating not in ['good', 'medium', 'bad']:
+                    # TODO print warning
+                    continue
+
+                if channel['name'] in channels:
+                    return rating
+
+            return 'unrated'
+
+        for channel in slack_state['channels'] + slack_state['groups'] + slack_state['ims']:
+
+            if not channel.get('is_member', True) or channel['is_archived']:
+                continue
+
+            human_readable_name = channel.get("name")
+
+            if not human_readable_name:
+                human_readable_name = id_to_username[channel["user"]]
+
+            rating = get_rating(channel, conf, muted_channel_ids)
+
+            row = (channel["id"], rating, channel["unread_count_display"], human_readable_name)
+            output.append(row)
+
+        unreads_by_rating = {}
+
+        for row in sorted(output, key = lambda x: (x[1], -x[2])):
+            print(f"{row[0]: >11} {row[1]: >9} {row[2]: >6} unreads   {row[3]}", file=sys.stderr)
+
+            rating = row[1]
+            unreads = row[2]
+
+            if rating not in unreads_by_rating:
+                unreads_by_rating[rating] = 0
+            unreads_by_rating[rating] += unreads
+
+
+        colors = [
+            ("direct", "#ffffff"),
+            ("good", "#39e600"),
+            ("medium", "#ffe970"),
+            ("bad", "#ff6f69"),
+            ("unrated", "#96897f"),
+        ]
+
+        output = ""
+
+        for rating, color in colors:
+            unreads = unreads_by_rating.get(rating, 0)
+            if unreads > 0:
+                output += f"#[fg={color}]{unreads} "
+        return output.strip()
+
 statusbar_classes = {
     "battery": Battery,
     "date": Date,
     "reddit": Reddit,
     "spotify": Spotify,
     "weather": Weather,
+    "slack": Slack,
 }
 
 def get_statusbar():
@@ -166,8 +259,15 @@ def get_statusbar():
 
             cache_item = cache.get(item, {})
 
+            if 'error' in cache_item:
+                print(f'Found error marker in cache for {item}', file=sys.stderr)
+                raise SkipItemException()
+
+
             if (not cache_item) or (now > cache_item['expiry']):
+
                 item_text = statusbar_item.get_text()
+                print(f'Running {item}', file=sys.stderr)
                 expiry = statusbar_item.expiry()
 
                 if expiry != -1:
@@ -177,19 +277,27 @@ def get_statusbar():
                     }
 
             else:
+                print(f'Loaded {item} from cache', file=sys.stderr)
                 item_text = cache_item['text']
 
             header = color_headers[len(statusbar)%len(color_headers)]
-            print(f'Running {item}', file=sys.stderr)
+
+            statusbar.append(f'{header} {item_text} ')
 
         except SkipItemException as e:
             print(f'Skipping {item}', file=sys.stderr)
-            continue
         except Exception:
             traceback.print_exc(file=sys.stderr)
-            continue
 
-        statusbar.append(f'{header} {item_text} ')
+            statusbar_item = statusbar_classes[item]()
+            expiry = statusbar_item.expiry()
+
+            if expiry != -1:
+                cache[item] = {
+                    'expiry': now + expiry,
+                    'text': '',
+                    'error': True
+                }
 
     write_cache(cache)
     print(''.join(statusbar), end='')

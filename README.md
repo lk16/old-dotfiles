@@ -41,13 +41,12 @@ pip install -r requirements.txt
 
 
 - [ ] tmux statusbar
-    - [ ] customize statusbar items
-        - [x] allow customizing order in config file
-        - [x] update interval
-        - [ ] colours
-    - [ ] warnings
-        - [ ] full disk
-        - [ ] high cpu usage
+    - [ ] meta
+        - [x] custom order
+        - [x] custom update interval
+        - [ ] option to run individual statusbar items
+        - [ ] option to disable cache
+        - [ ] save logs
     - [x] weather
     - [x] spotify
     - [ ] battery
@@ -58,9 +57,9 @@ pip install -r requirements.txt
         - [x] reddit
             - [x] karma
             - [x] unread replies
-        - [ ] slack
-            - [ ] unread mentions
-            - [ ] allow blacklisting channels
+        - [x] slack
+            - [x] unread mentions
+            - [x] allow blacklisting channels
         - [ ] gmail unread mails
         - [ ] bitbucket
             - [ ] unapproved PRs to review
