@@ -139,7 +139,7 @@ class Reddit(StatusBarItem):
 class Slack(StatusBarItem):
 
     def expiry(self):
-        return 60
+        return 120
 
     def get_text(self):
         conf = load_config("slack")
