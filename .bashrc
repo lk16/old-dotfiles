@@ -57,7 +57,7 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;33m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
@@ -117,7 +117,7 @@ export COLOR_LIGHT_GRAY='\e[0;37m'
 
 
 # default prompt colors
-USER_PROMPT_COLOR=$COLOR_LIGHT_BLUE
+USER_PROMPT_COLOR=$COLOR_YELLOW
 USER_COMMAND_COLOR=$COLOR_LIGHT_PURPLE
 
 # prompt colors for root
@@ -147,7 +147,7 @@ PATH=$PATH:$HOME/.local/bin:/opt/bin
 
 export AIRFLOW_HOME=$HOME/.airflow
 
-export PATH=$PATH:/usr/local/go/bin:$HOME/projects/golang/bin
+export PATH=$PATH:/usr/local/go/bin:$HOME/projects/golang/bin:$HOME/.pulumi/bin
 
 export GOPATH=$HOME/projects/golang
 export GOBIN=$HOME/projects/golang/bin
@@ -160,9 +160,12 @@ if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
 fi
 
-
 # modify PATH such that repeated entries are removed
 PATH=$(python3 -c 'import os; from collections import OrderedDict; \
     l=os.environ["PATH"].split(":"); print(":".join(OrderedDict.fromkeys(l)))' )
 
-
+function lskeys() {
+    KEYS_REPO="$HOME/projects/ssh_keys"
+    git -C $KEYS_REPO pull --quiet
+    cat /dev/null `find $KEYS_REPO -name '*.pub' | egrep "$1"`
+}

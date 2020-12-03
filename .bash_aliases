@@ -28,6 +28,7 @@ alias gig='git'
 
 alias gg="git log --graph --oneline --decorate --all"
 alias ggs="git status"
+alias gds="git diff --stat"
 alias ggsi="git status --ignored"
 alias ggc="git checkout"
 alias ggr="git rebase"
@@ -38,6 +39,10 @@ alias ggpf="git push --force-with-lease"
 
 alias edit="code"
 alias json="python3 -m json.tool"
+
+alias dps="docker-compose ps"
+
+alias alert="play -q ~/.dotfiles/airhorn.mp3 repeat -"
 
 function goo() {
     brave-browser --new-tab "https://google.com/search?q=$*" 2>&1 >/dev/null
@@ -59,3 +64,5 @@ function bright() {
 function confirm() {
     $HOME/.dotfiles/manage.py confirm -- $@
 }
+
+alias dc="docker-compose"
