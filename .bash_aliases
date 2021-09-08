@@ -36,6 +36,7 @@ alias ggrc="git rebase --continue"
 alias gitroot='git rev-parse --show-toplevel 2>/dev/null'
 alias gv="git rev-parse HEAD | cut -c -8"
 alias ggpf="git push --force-with-lease"
+alias gp='git push -u origin $(git branch --show-current)'
 
 alias edit="code"
 alias json="python3 -m json.tool"
@@ -44,25 +45,27 @@ alias dps="docker-compose ps"
 
 alias alert="play -q ~/.dotfiles/airhorn.mp3 repeat -"
 
-function goo() {
-    brave-browser --new-tab "https://google.com/search?q=$*" 2>&1 >/dev/null
-}
-
-function gocover() {
-    covername=$(basename $(gitroot))
-    coverfile="/tmp/$covername.cover"
-    go test -coverprofile="$coverfile" ./... >/dev/null
-    go tool cover -html="$coverfile" 2>&1 >/dev/null
-}
-
 function bright() {
     for output in $(xrandr | grep ' connected ' | cut -d ' ' -f 1); do
         xrandr --output "$output" --brightness $1 2>/dev/null
     done
 }
 
-function confirm() {
-    $HOME/.dotfiles/manage.py confirm -- $@
+alias dc="docker-compose"
+
+function mrs(){
+    (
+        cd /home/luuk/gig/notes/tools
+        . venv/bin/activate
+        ./manage.py mrs $@
+    )
 }
 
-alias dc="docker-compose"
+
+function mr(){
+    (
+        cd /home/luuk/gig/notes/tools
+        . venv/bin/activate
+        ./manage.py mr $@
+    )
+}

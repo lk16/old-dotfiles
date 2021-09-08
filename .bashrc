@@ -152,14 +152,6 @@ export PATH=$PATH:/usr/local/go/bin:$HOME/projects/golang/bin:$HOME/.pulumi/bin
 export GOPATH=$HOME/projects/golang
 export GOBIN=$HOME/projects/golang/bin
 
-# setup pyenv
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-
-if command -v pyenv 1>/dev/null 2>&1; then
-  eval "$(pyenv init -)"
-fi
-
 # modify PATH such that repeated entries are removed
 PATH=$(python3 -c 'import os; from collections import OrderedDict; \
     l=os.environ["PATH"].split(":"); print(":".join(OrderedDict.fromkeys(l)))' )
@@ -169,3 +161,11 @@ function lskeys() {
     git -C $KEYS_REPO pull --quiet
     cat /dev/null `find $KEYS_REPO -name '*.pub' | egrep "$1"`
 }
+eval "$(pyenv init -)"
+
+export PATH=$PATH:/usr/local/go/bin
+
+eval $(keychain --eval id_rsa --eval id_rsa_work -q)
+
+# enables: ctrl + backspace to delete a word
+stty werase \^H
